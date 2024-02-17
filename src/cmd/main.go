@@ -20,4 +20,5 @@ func main() {
 			Msg("main: unable to parse config")
 	}
 
+	_ = ctx
 }

@@ -23,6 +23,9 @@ func NewServer(ctx context.Context, cfg pkghttp.Config) (Server, error) {
 }
 
 func (s *httpServer) Setup(ctx context.Context) error {
+	log.Info().
+		Msg("handlers.http.httpServer.Setup: Setting up HTTP server...")
+
 	// setup middlewares
 	s.router.Use(middleware.Logger())
 	s.router.Use(middleware.Recover())
@@ -33,6 +36,7 @@ func (s *httpServer) Setup(ctx context.Context) error {
 
 func (s *httpServer) Start(ctx context.Context) error {
 	log.Info().
+		Uint16("port", s.config.Port).
 		Msg("handlers.http.httpServer.Start: Starting HTTP server...")
 
 	return s.router.Start(fmt.Sprintf(":%d", s.config.Port))
