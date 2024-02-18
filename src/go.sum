@@ -1,5 +1,7 @@
 github.com/Golerplate/pkg v0.0.4 h1:iiTDfgXn2ZGti2Zl/POm3RwQhdOpaYj6zNFShcuN2CU=
 github.com/Golerplate/pkg v0.0.4/go.mod h1:teUKN+eFNoAk4GmQ9E0nQnI2jYoVasPkbg2+J/yZF9c=
+github.com/Golerplate/pkg v0.0.5 h1:e0DEUTzoXLO2Lu/nPijbm0c/bsG8B/xOYv0F8HC70PU=
+github.com/Golerplate/pkg v0.0.5/go.mod h1:teUKN+eFNoAk4GmQ9E0nQnI2jYoVasPkbg2+J/yZF9c=
 github.com/caarlos0/env/v10 v10.0.0 h1:yIHUBZGsyqCnpTkbjk8asUlx6RFhhEs+h7TOBdgdzXA=
 github.com/caarlos0/env/v10 v10.0.0/go.mod h1:ZfulV76NvVPw3tm591U4SwL3Xx9ldzBP9aGxzeN7G18=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=

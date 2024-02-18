@@ -7,5 +7,5 @@ import (
 
 type Config struct {
 	pkgconfig.ServiceConfig
-	pkghttp.Config
+	pkghttp.HTTPServerConfig
 }

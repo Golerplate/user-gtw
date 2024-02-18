@@ -1,4 +1,4 @@
-package http
+package handlers_http
 
 import (
 	"context"
@@ -12,10 +12,10 @@ import (
 
 type httpServer struct {
 	router *echo.Echo
-	config pkghttp.Config
+	config pkghttp.HTTPServerConfig
 }
 
-func NewServer(ctx context.Context, cfg pkghttp.Config) (Server, error) {
+func NewServer(ctx context.Context, cfg pkghttp.HTTPServerConfig) (Server, error) {
 	return &httpServer{
 		router: echo.New(),
 		config: cfg,
