@@ -8,6 +8,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
+
+	"github.com/golerplate/user-gtw/internal/handlers"
 )
 
 type httpServer struct {
@@ -15,7 +17,7 @@ type httpServer struct {
 	config pkghttp.HTTPServerConfig
 }
 
-func NewServer(ctx context.Context, cfg pkghttp.HTTPServerConfig) (Server, error) {
+func NewServer(ctx context.Context, cfg pkghttp.HTTPServerConfig) (handlers.Server, error) {
 	return &httpServer{
 		router: echo.New(),
 		config: cfg,
@@ -30,6 +32,10 @@ func (s *httpServer) Setup(ctx context.Context) error {
 	s.router.Use(middleware.Logger())
 	s.router.Use(middleware.Recover())
 	s.router.Use(middleware.CORS())
+
+	// setup endpoints
+	privateV1 := s.router.Group("/private/v1")
+	_ = privateV1
 
 	return nil
 }

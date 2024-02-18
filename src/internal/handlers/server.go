@@ -1,4 +1,4 @@
-package handlers_http
+package handlers
 
 import "context"
 
