@@ -3,7 +3,7 @@ package service_v1
 import (
 	"context"
 
-	user_store_svc_v1 "github.com/Golerplate/contracts/clients/user-store-svc/v1"
+	user_store_svc_v1 "github.com/golerplate/contracts/clients/user-store-svc/v1"
 )
 
 type Service struct {

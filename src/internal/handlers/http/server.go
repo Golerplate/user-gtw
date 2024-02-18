@@ -4,29 +4,36 @@ import (
 	"context"
 	"fmt"
 
-	pkghttp "github.com/Golerplate/pkg/http"
+	pkghttp "github.com/golerplate/pkg/http"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
 
 	"github.com/golerplate/user-gtw/internal/handlers"
+	handlers_http_private_users_v1 "github.com/golerplate/user-gtw/internal/handlers/http/private/users/v1"
+	service_v1 "github.com/golerplate/user-gtw/internal/service/v1"
 )
 
 type httpServer struct {
-	router *echo.Echo
-	config pkghttp.HTTPServerConfig
+	router  *echo.Echo
+	config  pkghttp.HTTPServerConfig
+	service *service_v1.Service
 }
 
-func NewServer(ctx context.Context, cfg pkghttp.HTTPServerConfig) (handlers.Server, error) {
+func NewServer(ctx context.Context, cfg pkghttp.HTTPServerConfig, service *service_v1.Service) (handlers.Server, error) {
 	return &httpServer{
-		router: echo.New(),
-		config: cfg,
+		router:  echo.New(),
+		config:  cfg,
+		service: service,
 	}, nil
 }
 
 func (s *httpServer) Setup(ctx context.Context) error {
 	log.Info().
 		Msg("handlers.http.httpServer.Setup: Setting up HTTP server...")
+
+	// setup handlers
+	privateUsersV1Handlers := handlers_http_private_users_v1.NewHandler(ctx, s.service)
 
 	// setup middlewares
 	s.router.Use(middleware.Logger())
@@ -35,7 +42,10 @@ func (s *httpServer) Setup(ctx context.Context) error {
 
 	// setup endpoints
 	privateV1 := s.router.Group("/private/v1")
-	_ = privateV1
+
+	// users related endpoints
+	privateUsersV1 := privateV1.Group("/users")
+	privateUsersV1.GET("/:identifier", privateUsersV1Handlers.GetByIdentifier)
 
 	return nil
 }

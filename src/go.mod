@@ -3,9 +3,8 @@ module github.com/golerplate/user-gtw
 go 1.22.0
 
 require (
-	github.com/Golerplate/contracts v0.0.6
-	github.com/Golerplate/pkg v0.0.6
-	github.com/labstack/echo v3.3.10+incompatible
+	github.com/golerplate/contracts v0.0.9
+	github.com/golerplate/pkg v0.0.9
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/rs/zerolog v1.32.0
 	github.com/stretchr/testify v1.8.4

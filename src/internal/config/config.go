@@ -1,8 +1,8 @@
 package config
 
 import (
-	pkgconfig "github.com/Golerplate/pkg/config"
-	pkghttp "github.com/Golerplate/pkg/http"
+	pkgconfig "github.com/golerplate/pkg/config"
+	pkghttp "github.com/golerplate/pkg/http"
 )
 
 type Config struct {

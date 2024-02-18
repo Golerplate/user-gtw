@@ -3,8 +3,8 @@ package service_v1
 import (
 	"context"
 
-	user_store_svc_v1_entities "github.com/Golerplate/contracts/clients/user-store-svc/v1/entities"
-	constants "github.com/Golerplate/pkg/constants"
+	user_store_svc_v1_entities "github.com/golerplate/contracts/clients/user-store-svc/v1/entities"
+	constants "github.com/golerplate/pkg/constants"
 
 	entities_user_v1 "github.com/golerplate/user-gtw/internal/entities/user/v1"
 )
@@ -26,10 +26,10 @@ func (s *Service) GetUserByIdentifier(ctx context.Context, identifier string) (*
 	}
 
 	return &entities_user_v1.User{
-		ID:        user.ID,
-		Username:  user.Username,
-		Email:     user.Email,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+		ID:             user.ID,
+		Username:       user.Username,
+		IsVerified:     user.IsVerified,
+		ProfilePicture: user.ProfilePicture,
+		CreatedAt:      user.CreatedAt,
 	}, nil
 }

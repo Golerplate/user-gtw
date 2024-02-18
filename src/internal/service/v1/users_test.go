@@ -5,22 +5,16 @@ import (
 	"testing"
 	"time"
 
-	user_store_svc_v1_entities "github.com/Golerplate/contracts/clients/user-store-svc/v1/entities"
-	user_store_svc_v1_mocks "github.com/Golerplate/contracts/clients/user-store-svc/v1/mocks"
-	"github.com/Golerplate/pkg/constants"
-	pkgerrors "github.com/Golerplate/pkg/errors"
+	user_store_svc_v1_entities "github.com/golerplate/contracts/clients/user-store-svc/v1/entities"
+	user_store_svc_v1_mocks "github.com/golerplate/contracts/clients/user-store-svc/v1/mocks"
+	"github.com/golerplate/pkg/constants"
+	pkgerrors "github.com/golerplate/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 
 	entities_user_v1 "github.com/golerplate/user-gtw/internal/entities/user/v1"
 	service_v1 "github.com/golerplate/user-gtw/internal/service/v1"
 )
-
-func Setup() {
-}
-
-func TearDown() {
-}
 
 func Test_GetUserByIdentifier(t *testing.T) {
 	t.Run("ok - user id", func(t *testing.T) {
@@ -31,11 +25,13 @@ func Test_GetUserByIdentifier(t *testing.T) {
 		created := time.Now()
 
 		m.EXPECT().GetUserByID(gomock.Any(), userid).Return(&user_store_svc_v1_entities.User{
-			ID:        userid,
-			Username:  "testuser",
-			Email:     "testuser@test.com",
-			CreatedAt: created,
-			UpdatedAt: created,
+			ID:             userid,
+			Username:       "testuser",
+			Email:          "testuser@test.com",
+			IsVerified:     true,
+			ProfilePicture: "https://test.com/testuser.jpg",
+			CreatedAt:      created,
+			UpdatedAt:      created,
 		}, nil)
 
 		s, err := service_v1.NewService(context.Background(), m)
@@ -47,11 +43,11 @@ func Test_GetUserByIdentifier(t *testing.T) {
 		assert.NoError(t, err)
 
 		assert.EqualValues(t, &entities_user_v1.User{
-			ID:        userid,
-			Username:  "testuser",
-			Email:     "testuser@test.com",
-			CreatedAt: created,
-			UpdatedAt: created,
+			ID:             userid,
+			Username:       "testuser",
+			IsVerified:     true,
+			ProfilePicture: "https://test.com/testuser.jpg",
+			CreatedAt:      created,
 		}, user)
 	})
 
@@ -63,11 +59,13 @@ func Test_GetUserByIdentifier(t *testing.T) {
 		created := time.Now()
 
 		m.EXPECT().GetUserByUsername(gomock.Any(), "testuser").Return(&user_store_svc_v1_entities.User{
-			ID:        userid,
-			Username:  "testuser",
-			Email:     "testuser@test.com",
-			CreatedAt: created,
-			UpdatedAt: created,
+			ID:             userid,
+			Username:       "testuser",
+			Email:          "testuser@test.com",
+			IsVerified:     true,
+			ProfilePicture: "https://test.com/testuser.jpg",
+			CreatedAt:      created,
+			UpdatedAt:      created,
 		}, nil)
 
 		s, err := service_v1.NewService(context.Background(), m)
@@ -79,11 +77,11 @@ func Test_GetUserByIdentifier(t *testing.T) {
 		assert.NoError(t, err)
 
 		assert.EqualValues(t, &entities_user_v1.User{
-			ID:        userid,
-			Username:  "testuser",
-			Email:     "testuser@test.com",
-			CreatedAt: created,
-			UpdatedAt: created,
+			ID:             userid,
+			Username:       "testuser",
+			IsVerified:     true,
+			ProfilePicture: "https://test.com/testuser.jpg",
+			CreatedAt:      created,
 		}, user)
 	})
 

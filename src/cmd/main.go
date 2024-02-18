@@ -6,11 +6,12 @@ import (
 	"os/signal"
 	"syscall"
 
-	pkgconfig "github.com/Golerplate/pkg/config"
+	pkgconfig "github.com/golerplate/pkg/config"
 	"github.com/rs/zerolog/log"
 
 	"github.com/golerplate/user-gtw/internal/config"
 	handlers_http "github.com/golerplate/user-gtw/internal/handlers/http"
+	service_v1 "github.com/golerplate/user-gtw/internal/service/v1"
 )
 
 func main() {
@@ -28,8 +29,14 @@ func main() {
 			Msg("main: unable to parse config")
 	}
 
+	service, err := service_v1.NewService(ctx, nil)
+	if err != nil {
+		log.Fatal().Err(err).
+			Msg("main: unable to create service")
+	}
+
 	// create http server
-	httpServer, err := handlers_http.NewServer(ctx, config.HTTPServerConfig)
+	httpServer, err := handlers_http.NewServer(ctx, config.HTTPServerConfig, service)
 	if err != nil {
 		log.Fatal().Err(err).
 			Msg("main: unable to create http server")
