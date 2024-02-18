@@ -25,8 +25,11 @@ func (s *Service) GetUserByIdentifier(ctx context.Context, identifier string) (*
 		}
 	}
 
-	_ = user
-	_ = err
-
-	return nil, nil
+	return &entities_user_v1.User{
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}, nil
 }
