@@ -33,13 +33,12 @@ func Test_GetByIdentifier(t *testing.T) {
 
 		// setup mocks
 		m.EXPECT().GetUserByUsername(gomock.Any(), "testuser").Return(&user_store_svc_v1_entities.User{
-			ID:             userid,
-			Username:       "testuser",
-			Email:          "testuser@test.com",
-			IsVerified:     false,
-			ProfilePicture: "https://test.com/testuser.jpg",
-			CreatedAt:      created,
-			UpdatedAt:      created,
+			ID:         userid,
+			ExternalID: "external_xx",
+			Username:   "testuser",
+			Email:      "testuser@test.com",
+			CreatedAt:  created,
+			UpdatedAt:  created,
 		}, nil)
 
 		// setup service
@@ -63,11 +62,8 @@ func Test_GetByIdentifier(t *testing.T) {
 		data := handlers_http_private_users_v1.GetByIdentifierResponse{
 			Account: &models_http_common_account_v1.Account{
 				User: &models_http_common_account_v1.User{
-					ID:             userid,
-					Username:       "testuser",
-					IsVerified:     false,
-					ProfilePicture: "https://test.com/testuser.jpg",
-					CreatedAt:      created,
+					ID:       userid,
+					Username: "testuser",
 				},
 			},
 		}

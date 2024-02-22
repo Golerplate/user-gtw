@@ -10,6 +10,8 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/golerplate/user-gtw/internal/handlers"
+	handlers_http_internal_users_v1 "github.com/golerplate/user-gtw/internal/handlers/http/internal/users/v1"
+	handlers_http_private_current_user_v1 "github.com/golerplate/user-gtw/internal/handlers/http/private/current-user/v1"
 	handlers_http_private_users_v1 "github.com/golerplate/user-gtw/internal/handlers/http/private/users/v1"
 	service_v1 "github.com/golerplate/user-gtw/internal/service/v1"
 )
@@ -33,7 +35,10 @@ func (s *httpServer) Setup(ctx context.Context) error {
 		Msg("handlers.http.httpServer.Setup: Setting up HTTP server...")
 
 	// setup handlers
+	privateCurrentUserV1Handlers := handlers_http_private_current_user_v1.NewHandler(ctx, s.service)
 	privateUsersV1Handlers := handlers_http_private_users_v1.NewHandler(ctx, s.service)
+
+	internalUsersV1Handlers := handlers_http_internal_users_v1.NewHandler(ctx, s.service)
 
 	// setup middlewares
 	s.router.Use(middleware.Logger())
@@ -41,11 +46,25 @@ func (s *httpServer) Setup(ctx context.Context) error {
 	s.router.Use(middleware.CORS())
 
 	// setup endpoints
+
+	// private endpoints
 	privateV1 := s.router.Group("/private/v1")
 
 	// users related endpoints
 	privateUsersV1 := privateV1.Group("/users")
 	privateUsersV1.GET("/:identifier", privateUsersV1Handlers.GetByIdentifier)
+
+	// current-user related endpoints
+	privateCurrentUserV1 := privateUsersV1.Group("/current-user")
+	privateCurrentUserV1.GET("/", privateCurrentUserV1Handlers.Get)
+	privateCurrentUserV1.PUT("/username", privateCurrentUserV1Handlers.UpdateUsername)
+
+	// internal endpoints
+	internalV1 := s.router.Group("/internal/v1")
+
+	// users related endpoints
+	internalUsersV1 := internalV1.Group("/users")
+	internalUsersV1.POST("/", internalUsersV1Handlers.Create)
 
 	return nil
 }

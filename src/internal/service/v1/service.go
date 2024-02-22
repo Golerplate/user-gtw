@@ -10,7 +10,9 @@ type Service struct {
 	userStoreSvc user_store_svc_v1.UserStoreSvc
 }
 
-func NewService(ctx context.Context, userStoreSvc user_store_svc_v1.UserStoreSvc) (*Service, error) {
+func NewService(ctx context.Context,
+	userStoreSvc user_store_svc_v1.UserStoreSvc,
+) (*Service, error) {
 	return &Service{
 		userStoreSvc: userStoreSvc,
 	}, nil
