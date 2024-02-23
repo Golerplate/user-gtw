@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	user_store_grpc_v1 "github.com/golerplate/contracts/clients/user-store-svc/v1/grpc"
 	pkgconfig "github.com/golerplate/pkg/config"
 	"github.com/rs/zerolog/log"
 
@@ -29,7 +30,9 @@ func main() {
 			Msg("main: unable to parse config")
 	}
 
-	service, err := service_v1.NewService(ctx, nil)
+	userStoreClient := user_store_grpc_v1.NewUserStoreSvcClient(ctx, "127.0.0.1:50051")
+
+	service, err := service_v1.NewService(ctx, userStoreClient)
 	if err != nil {
 		log.Fatal().Err(err).
 			Msg("main: unable to create service")
