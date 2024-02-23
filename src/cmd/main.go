@@ -30,7 +30,7 @@ func main() {
 			Msg("main: unable to parse config")
 	}
 
-	userStoreClient := user_store_grpc_v1.NewUserStoreSvcClient(ctx, "127.0.0.1:50051")
+	userStoreClient := user_store_grpc_v1.NewUserStoreSvcClient(ctx, config.UserStoreSvcConfig.Addr)
 
 	service, err := service_v1.NewService(ctx, userStoreClient)
 	if err != nil {

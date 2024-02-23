@@ -11,6 +11,8 @@ github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keL
 github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=
 github.com/golerplate/contracts v0.0.19 h1:uNyb/m4IzR3fAeJfMD0FjzQeHO+XF0w/6ypqQI5Pu/k=
 github.com/golerplate/contracts v0.0.19/go.mod h1:ngmB/qx1WQFkGMS4TNGvHkWR1RxAtedI8cz7ig/EYP8=
+github.com/golerplate/contracts v0.0.20 h1:RjVr5Ou6knmd/jjwgGBMNqJcgi4CdiH4Ba+m77n8myU=
+github.com/golerplate/contracts v0.0.20/go.mod h1:ngmB/qx1WQFkGMS4TNGvHkWR1RxAtedI8cz7ig/EYP8=
 github.com/golerplate/pkg v0.0.15 h1:L9JDsJG3mo8hWlrrogIPj5O8aeIDTIWFgeFWZShBlQU=
 github.com/golerplate/pkg v0.0.15/go.mod h1:/JzlhRCP+st64IMPzoXIaalKEcuKYzx9LtBTzipxx4s=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=

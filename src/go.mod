@@ -3,7 +3,7 @@ module github.com/golerplate/user-gtw
 go 1.22.0
 
 require (
-	github.com/golerplate/contracts v0.0.19
+	github.com/golerplate/contracts v0.0.20
 	github.com/golerplate/pkg v0.0.15
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/rs/zerolog v1.32.0
