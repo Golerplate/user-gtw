@@ -1,4 +1,4 @@
-package handlers_http_internal_users_v1
+package handlers_http_private_users_v1
 
 import (
 	"net/http"
@@ -10,33 +10,33 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type CreateRequest struct {
-	ExternalID string `json:"external_id"`
-	Email      string `json:"email"`
+type CreateUserRequest struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
 }
 
-type CreateResponse struct {
+type CreateUserResponse struct {
 	Account *models_http_common_account_v1.Account `json:"account"`
 }
 
-func (h *Handler) Create(c echo.Context) error {
+func (h *Handler) CreateUser(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	var req CreateRequest
+	var req CreateUserRequest
 	if err := c.Bind(&req); err != nil {
 		log.Error().Err(err).Msg("handlers.http.internal.users.v1.create.Handler.Create: can not bind request")
 		return c.JSON(http.StatusBadRequest, pkghttp.NewHTTPResponse(http.StatusBadRequest, pkghttp.MessageBadRequestError, nil))
 	}
 
-	user, err := h.service.CreateUser(ctx, &entities_user_v1.UserCreate{
-		ExternalID: req.ExternalID,
-		Email:      req.Email,
+	user, err := h.service.CreateUser(ctx, &entities_user_v1.CreateUserRequest{
+		Username: req.Username,
+		Email:    req.Email,
 	})
 	if err != nil {
 		return c.JSON(pkghttp.TranslateError(ctx, err))
 	}
 
-	return c.JSON(http.StatusOK, pkghttp.NewHTTPResponse(http.StatusOK, pkghttp.MessageSuccess, CreateResponse{
+	return c.JSON(http.StatusOK, pkghttp.NewHTTPResponse(http.StatusOK, pkghttp.MessageSuccess, CreateUserResponse{
 		Account: &models_http_common_account_v1.Account{
 			User: &models_http_common_account_v1.User{
 				ID:       user.ID,

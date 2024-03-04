@@ -9,6 +9,5 @@ import (
 type Config struct {
 	pkgconfig.ServiceConfig
 	pkghttp.HTTPServerConfig
-
 	contracts_user_store_svc.UserStoreSvcConfig
 }

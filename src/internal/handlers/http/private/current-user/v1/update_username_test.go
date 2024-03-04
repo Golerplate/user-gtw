@@ -34,12 +34,11 @@ func Test_UpdateUsername(t *testing.T) {
 		created := time.Now()
 
 		m.EXPECT().UpdateUsername(gomock.Any(), userid, "testuser_refreshed").Return(&user_store_svc_v1_entities.User{
-			ID:         userid,
-			ExternalID: "external_xx",
-			Username:   "testuser_refreshed",
-			Email:      "testuser@test.com",
-			CreatedAt:  created,
-			UpdatedAt:  created,
+			ID:        userid,
+			Username:  "testuser_refreshed",
+			Email:     "testuser@test.com",
+			CreatedAt: created,
+			UpdatedAt: created,
 		}, nil)
 
 		// setup service
@@ -62,12 +61,11 @@ func Test_UpdateUsername(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		c.Set("x-cuser", &entities_user_v1.User{
-			ID:         userid,
-			ExternalID: "external_xx",
-			Username:   "testuser",
-			Email:      "testuser@test.com",
-			CreatedAt:  created,
-			UpdatedAt:  created,
+			ID:        userid,
+			Username:  "testuser",
+			Email:     "testuser@test.com",
+			CreatedAt: created,
+			UpdatedAt: created,
 		})
 
 		handler := handlers_http_private_current_user_v1.NewHandler(context.Background(), s)
@@ -118,12 +116,11 @@ func Test_UpdateUsername(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		c.Set("x-cuser", &entities_user_v1.User{
-			ID:         userid,
-			ExternalID: "external_xx",
-			Username:   "testuser",
-			Email:      "testuser@test.com",
-			CreatedAt:  created,
-			UpdatedAt:  created,
+			ID:        userid,
+			Username:  "testuser",
+			Email:     "testuser@test.com",
+			CreatedAt: created,
+			UpdatedAt: created,
 		})
 
 		handler := handlers_http_private_current_user_v1.NewHandler(context.Background(), s)
@@ -169,12 +166,11 @@ func Test_UpdateUsername(t *testing.T) {
 		c := e.NewContext(req, rec)
 
 		c.Set("x-cuser", &entities_user_v1.User{
-			ID:         userid,
-			ExternalID: "external_xx",
-			Username:   "testuser",
-			Email:      "testuser@test.com",
-			CreatedAt:  created,
-			UpdatedAt:  created,
+			ID:        userid,
+			Username:  "testuser",
+			Email:     "testuser@test.com",
+			CreatedAt: created,
+			UpdatedAt: created,
 		})
 
 		handler := handlers_http_private_current_user_v1.NewHandler(context.Background(), s)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -29,6 +30,8 @@ func main() {
 			Err(err).
 			Msg("main: unable to parse config")
 	}
+
+	fmt.Print("coucou", config)
 
 	userStoreClient := user_store_grpc_v1.NewUserStoreSvcClient(ctx, config.UserStoreSvcConfig.Addr)
 

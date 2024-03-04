@@ -9,22 +9,21 @@ import (
 	entities_user_v1 "github.com/golerplate/user-gtw/internal/entities/user/v1"
 )
 
-func (s *Service) CreateUser(ctx context.Context, req *entities_user_v1.UserCreate) (*entities_user_v1.User, error) {
+func (s *Service) CreateUser(ctx context.Context, req *entities_user_v1.CreateUserRequest) (*entities_user_v1.User, error) {
 	user, err := s.userStoreSvc.CreateUser(ctx, &user_store_svc_v1_entities.UserCreate{
-		ExternalID: req.ExternalID,
-		Email:      req.Email,
+		Username: req.Username,
+		Email:    req.Email,
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	return &entities_user_v1.User{
-		ID:         user.ID,
-		ExternalID: user.ExternalID,
-		Username:   user.Username,
-		Email:      user.Email,
-		CreatedAt:  user.CreatedAt,
-		UpdatedAt:  user.UpdatedAt,
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}, nil
 }
 
@@ -35,12 +34,11 @@ func (s *Service) UpdateUsername(ctx context.Context, cuser *entities_user_v1.Us
 	}
 
 	return &entities_user_v1.User{
-		ID:         user.ID,
-		ExternalID: user.ExternalID,
-		Username:   user.Username,
-		Email:      user.Email,
-		CreatedAt:  user.CreatedAt,
-		UpdatedAt:  user.UpdatedAt,
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}, nil
 }
 
@@ -61,11 +59,10 @@ func (s *Service) GetUserByIdentifier(ctx context.Context, identifier string) (*
 	}
 
 	return &entities_user_v1.User{
-		ID:         user.ID,
-		ExternalID: user.ExternalID,
-		Username:   user.Username,
-		Email:      user.Email,
-		CreatedAt:  user.CreatedAt,
-		UpdatedAt:  user.UpdatedAt,
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}, nil
 }

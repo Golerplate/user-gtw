@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -22,8 +23,8 @@ import (
 	service_v1 "github.com/golerplate/user-gtw/internal/service/v1"
 )
 
-func Test_GetByIdentifier(t *testing.T) {
-	t.Run("ok - username", func(t *testing.T) {
+func Test_CreateUser(t *testing.T) {
+	t.Run("ok - create user", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		m := user_store_svc_v1_mocks.NewMockUserStoreSvc(ctrl)
 
@@ -32,7 +33,10 @@ func Test_GetByIdentifier(t *testing.T) {
 		created := time.Now()
 
 		// setup mocks
-		m.EXPECT().GetUserByUsername(gomock.Any(), "testuser").Return(&user_store_svc_v1_entities.User{
+		m.EXPECT().CreateUser(gomock.Any(), &user_store_svc_v1_entities.UserCreate{
+			Username: "testuser",
+			Email:    "testuser@test.com",
+		}).Return(&user_store_svc_v1_entities.User{
 			ID:        userid,
 			Username:  "testuser",
 			Email:     "testuser@test.com",
@@ -45,20 +49,25 @@ func Test_GetByIdentifier(t *testing.T) {
 		assert.NotNil(t, s)
 		assert.NoError(t, err)
 
+		// setup body
+		body := &handlers_http_private_users_v1.CreateUserRequest{
+			Username: "testuser",
+			Email:    "testuser@test.com",
+		}
+		reqBody, err := json.Marshal(body)
+		assert.NoError(t, err)
+
 		// setup http handler
 		e := echo.New()
-		req := httptest.NewRequest(http.MethodGet, "/private/v1/users/testuser", nil)
+		req := httptest.NewRequest(http.MethodPut, "/private/v1/users", strings.NewReader(string(reqBody)))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)
 
-		c.SetParamNames("identifier")
-		c.SetParamValues("testuser")
-
 		handler := handlers_http_private_users_v1.NewHandler(context.Background(), s)
 
 		// prepare expected response
-		data := handlers_http_private_users_v1.GetByIdentifierResponse{
+		data := handlers_http_private_users_v1.CreateUserResponse{
 			Account: &models_http_common_account_v1.Account{
 				User: &models_http_common_account_v1.User{
 					ID:       userid,
@@ -72,48 +81,12 @@ func Test_GetByIdentifier(t *testing.T) {
 		assert.NoError(t, err)
 
 		// test
-		if assert.NoError(t, handler.GetByIdentifier(c)) {
+		if assert.NoError(t, handler.CreateUser(c)) {
 			assert.Equal(t, http.StatusOK, rec.Code)
 			assert.JSONEq(t, string(resp), rec.Body.String())
 		}
 	})
-
-	t.Run("nok - service fail", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		m := user_store_svc_v1_mocks.NewMockUserStoreSvc(ctrl)
-
-		// setup mocks
-		m.EXPECT().GetUserByUsername(gomock.Any(), "testuser").Return(nil, pkgerrors.NewInternalServerError("internal server error"))
-
-		// setup service
-		s, err := service_v1.NewService(context.Background(), m)
-		assert.NotNil(t, s)
-		assert.NoError(t, err)
-
-		// setup http handler
-		e := echo.New()
-		req := httptest.NewRequest(http.MethodGet, "/private/v1/users/testuser", nil)
-		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-		rec := httptest.NewRecorder()
-		c := e.NewContext(req, rec)
-
-		c.SetParamNames("identifier")
-		c.SetParamValues("testuser")
-
-		handler := handlers_http_private_users_v1.NewHandler(context.Background(), s)
-
-		formattedResponse := pkghttp.NewHTTPResponse(http.StatusInternalServerError, pkghttp.MessageInternalServerError, nil)
-		resp, err := json.Marshal(formattedResponse)
-		assert.NoError(t, err)
-
-		// test
-		if assert.NoError(t, handler.GetByIdentifier(c)) {
-			assert.Equal(t, http.StatusInternalServerError, rec.Code)
-			assert.JSONEq(t, string(resp), rec.Body.String())
-		}
-	})
-
-	t.Run("nok - missing identifier in url", func(t *testing.T) {
+	t.Run("nok - bind fail", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		m := user_store_svc_v1_mocks.NewMockUserStoreSvc(ctrl)
 
@@ -122,9 +95,12 @@ func Test_GetByIdentifier(t *testing.T) {
 		assert.NotNil(t, s)
 		assert.NoError(t, err)
 
+		// setup body
+		body := `{"username": "testuser_refreshed}`
+
 		// setup http handler
 		e := echo.New()
-		req := httptest.NewRequest(http.MethodGet, "/private/v1/users/testuser", nil)
+		req := httptest.NewRequest(http.MethodPut, "/private/v1/users", strings.NewReader(string(body)))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(req, rec)
@@ -136,8 +112,50 @@ func Test_GetByIdentifier(t *testing.T) {
 		assert.NoError(t, err)
 
 		// test
-		if assert.NoError(t, handler.GetByIdentifier(c)) {
+		if assert.NoError(t, handler.CreateUser(c)) {
 			assert.Equal(t, http.StatusBadRequest, rec.Code)
+			assert.JSONEq(t, string(resp), rec.Body.String())
+		}
+	})
+	t.Run("nok - client fail", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+		m := user_store_svc_v1_mocks.NewMockUserStoreSvc(ctrl)
+
+		// setup mocks
+		m.EXPECT().CreateUser(gomock.Any(), &user_store_svc_v1_entities.UserCreate{
+			Username: "testuser",
+			Email:    "testuser@test.com",
+		}).Return(nil, pkgerrors.NewInternalServerError("client error"))
+
+		// setup service
+		s, err := service_v1.NewService(context.Background(), m)
+		assert.NotNil(t, s)
+		assert.NoError(t, err)
+
+		// setup body
+		body := &handlers_http_private_users_v1.CreateUserRequest{
+			Username: "testuser",
+			Email:    "testuser@test.com",
+		}
+		reqBody, err := json.Marshal(body)
+		assert.NoError(t, err)
+
+		// setup http handler
+		e := echo.New()
+		req := httptest.NewRequest(http.MethodPut, "/private/v1/users", strings.NewReader(string(reqBody)))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+
+		handler := handlers_http_private_users_v1.NewHandler(context.Background(), s)
+
+		formattedResponse := pkghttp.NewHTTPResponse(http.StatusInternalServerError, pkghttp.MessageInternalServerError, nil)
+		resp, err := json.Marshal(formattedResponse)
+		assert.NoError(t, err)
+
+		// test
+		if assert.NoError(t, handler.CreateUser(c)) {
+			assert.Equal(t, http.StatusInternalServerError, rec.Code)
 			assert.JSONEq(t, string(resp), rec.Body.String())
 		}
 	})
